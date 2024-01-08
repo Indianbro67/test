@@ -36,7 +36,6 @@ import os
 import sys 
 import random
 import sys
-import uuid
 import time
 import requests
 import urllib3
@@ -45,9 +44,6 @@ from telethon.sync import TelegramClient
 from colorama import Fore
 from colorama import init
 from telethon.errors import FloodWaitError, ChatAdminRequiredError
-from telegram import Bot
-from telegram.error import TelegramError
-from telegram.utils.request import Request
 
 init(autoreset=True)
 
@@ -74,12 +70,12 @@ current_platform = platform.system()
 banner_frames = [
     f"{MAGENTA}\n",
     f"{MAGENTA}++++++---++++++++++++---++++++++++++---++++++++++++---++++++++++++---++++++{RESET}",
-    f"{RED}+ ____  _        _    ____ _  __  ____  _______     _____ _     _       +{RESET}",
-    f"{RED}-| __ )| |      / \  / ___| |/ / |  _ \\| ____\\ \   / /_ _| |   | |      -{RESET}",
-    f"{ORANGE}+|  _ \| |     / _ \| |   | ' /  | | | |  _|  \ \ / / | || |   | |      +{RESET}",
-    f"{YELLOW}-| |_) | |___ / ___ \ |___| . \  | |_| | |___  \ V /  | || |___| |___   -{RESET}",
-    f"{GREEN}+|____/|_____/_/   \_\____|_|\_\ |____/|_____|  \_/  |___|_____|_____|  +{RESET}",
-    f"{GREEN}-                                                                       -{RESET}",
+    f"{RED}+ ____ _ _ ____ _ __ ____ _______ _____ _ _ +{RESET}",
+    f"{RED}-| __ )| | / \ / ___| |/ / | _ \\| ____\\ \ / /_ _| | | | -{RESET}",
+    f"{ORANGE}+| _ \| | / _ \| | | ' / | | | | _| \ \ / / | || | | | +{RESET}",
+    f"{YELLOW}-| |_) | |___ / ___ \ |___| . \ | |_| | |___ \ V / | || |___| |___ -{RESET}",
+    f"{GREEN}+|____/|_____/_/ \_\____|_|\_\ |____/|_____| \_/ |___|_____|_____| +{RESET}",
+    f"{GREEN}- -{RESET}",
     f"{MAGENTA}++++++---++++++++++++---++++++++++++---++++++++++++---++++++++++++---++++++{RESET}",
     f"{MAGENTA}",
     f"{BLUE} TELEGRAM PURCHASE LICENSE KEY FROM {RED}= https://t.me/Black_Devil_Admin {RESET}",
@@ -90,14 +86,10 @@ banner_frames = [
 
 termux_banner = f"{CYAN}\n"
 termux_banner += f"{MAGENTA}╔════════════════════════════════╗{RESET}\n"
-termux_banner += f"{RED}║                                ║{RESET}\n"
-termux_banner += f"{RED}║   {GREEN}(っ◔◡◔)っ ♥ BLACK DEVIL ♥    {CYAN}║{RESET}\n"
-termux_banner += f"{ORANGE}║                                ║{RESET}\n"
+termux_banner += f"{RED}║ ║{RESET}\n"
+termux_banner += f"{RED}║ {GREEN}(っ◔◡◔)っ ♥ BLACK DEVIL ♥ {CYAN}║{RESET}\n"
+termux_banner += f"{ORANGE}║ ║{RESET}\n"
 termux_banner += f"{GREEN}╚════════════════════════════════╝{RESET}\n"
-
-def get_mac_address():
-    mac = ''.join(['{:08b}'.format((uuid.getnode() >> elements) & 0xff) for elements in range(5, -1, -1)])
-    return mac
 
 def clear_terminal():
     os.system("cls" if current_platform == "Windows" else "clear")
@@ -133,8 +125,8 @@ def connection_animation():
 connection_animation()
 
 
-api_id = "24701272"
-api_hash = "ff7c593337a217fc473c30135cf21b3d"
+api_id = "24383424"
+api_hash = "345aca1ff1c1b25f1675b2c8c1366510"
 session_name = "black_devil_admin"
 
 def send_message(client, group_entity, message):
@@ -143,47 +135,6 @@ def send_message(client, group_entity, message):
         print(Fore.YELLOW + f"Message sent:")
     except Exception as e:
         print(Fore.RED + f"Failed to send message:")
-
-def select_group(client):
-    dialogs = client.get_dialogs()
-
-    print("Available groups:")
-    for i, dialog in enumerate(dialogs, start=1):
-        print(f"{i}. {dialog.name}")
-
-    selected_index = -1
-    while selected_index < 0 or selected_index >= len(dialogs):
-        try:
-            selected_index = int(input("Select a group by entering its number: ")) - 1
-            if 0 <= selected_index < len(dialogs):
-                return dialogs[selected_index]
-            else:
-                print("Invalid selection. Please select a valid group.")
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-
-mac_address = get_mac_address()
-
-def verify_license(mac_address):
-    url = "https://pastebin.com/raw/sSGGmkeu"
-
-    try:
-        response = requests.get(url, verify=False)
-
-        if response.status_code == 200:
-            keys = response.text.splitlines()
-
-            if mac_address in keys:
-                print("License key is valid. Your software is licensed.")
-                return True
-            else:
-                return False
-        else:
-            print("Failed to retrieve the list of Activation keys from the server.")
-            return False
-    except requests.exceptions.RequestException as e:
-        print("An error occurred while making the request: please check your internet")
-        return False
 
 def select_group(client):
     dialogs = client.get_dialogs()
@@ -212,11 +163,70 @@ def select_group(client):
         except ValueError:
             print("Invalid input. Please enter a number.")
 
-def main():
-    mac_address = get_mac_address()
+def verify_license(key_from_user):
+    url = "https://pastebin.com/raw/DEu6VfyS"
 
-    if mac_address and verify_license(mac_address):
-        print(f"Your Software is activated: {Fore.GREEN}{mac_address}{RESET}")
+    try:
+        response = requests.get(url, verify=False)
+        
+        if response.status_code == 200:
+            keys = response.text.splitlines()
+            
+            if key_from_user in keys:
+                print("License key is valid. Your software is licensed.")
+                with open('license.txt', 'w') as f:
+                    f.write(key_from_user)
+                return True
+            else:
+                print(Fore.RED + "Invalid license key. Please enter a valid license key.")
+                return False
+        else:
+            print("Failed to retrieve the list of license keys from the server.")
+            return False
+    except requests.exceptions.RequestException as e:
+        print(Fore.RED + "An error occurred while making the request: please check your internet")
+        return False
+
+def check_saved_license():
+    try:
+        with open('license.txt', 'r') as f:
+            saved_license = f.read().strip()
+        return saved_license
+    except FileNotFoundError:
+        return None
+        
+def select_group(client):
+    dialogs = client.get_dialogs()
+
+    print("Available groups:")
+    group_count = 0
+
+    for dialog in dialogs:
+        if dialog.is_group:
+            group_count += 1
+            print(f"{group_count}. {dialog.name}, ID: {dialog.id}")
+
+    if group_count == 0:
+        print("No groups found.")
+        return None, None
+
+    selected_index = -1
+    while selected_index < 0 or selected_index >= group_count:
+        try:
+            selected_index = int(input("Select a group by entering its number: ")) - 1
+            if 0 <= selected_index < group_count:
+                selected_group = [d for d in dialogs if d.is_group][selected_index]
+                return selected_group.id, selected_group.name
+            else:
+                print("Invalid selection. Please select a valid group.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+def main():
+    saved_license = check_saved_license()
+
+    if saved_license and verify_license(saved_license):
+        print(f"Saved license key found: {Fore.GREEN}{saved_license}{RESET}")
         client = TelegramClient(session_name, api_id, api_hash)
 
         with client:
@@ -250,8 +260,10 @@ def main():
             except Exception as e:
                 print(f"{Fore.RED}Bot encountered an error: {str(e)}")
     else:
-        print(f"{Fore.RED}Activation Code: {mac_address}")
-        print(f"{Fore.GREEN}Send This Activation Code TO @Black_Devil_Admin For Activation: ")
-
+        while True:
+            user_key = input(f"{Fore.GREEN}Enter your license key: ")
+            if verify_license(user_key):
+                break
+                
 if __name__ == "__main__":
     main()
