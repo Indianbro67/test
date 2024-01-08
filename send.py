@@ -125,8 +125,8 @@ def connection_animation():
 connection_animation()
 
 
-api_id = "24383424"
-api_hash = "345aca1ff1c1b25f1675b2c8c1366510"
+api_id = "24701272"
+api_hash = "ff7c593337a217fc473c30135cf21b3d"
 session_name = "black_devil_admin"
 
 def send_message(client, group_entity, message):
